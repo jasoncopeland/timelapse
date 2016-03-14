@@ -1,6 +1,7 @@
 package com.jasoncopeland.timelapse;
 
 import com.jasoncopeland.timelapse.imgsource.IImageSource;
+import com.jasoncopeland.timelapse.imgsource.RaspberryCamera;
 import com.jasoncopeland.timelapse.imgsource.URLImageSource;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
@@ -15,13 +16,31 @@ public class TimeLapseRecorder {
 
     public static void main(String[] args) {
         final List<ImageTimelapse> timeLapses = new ArrayList<ImageTimelapse>();
+
+        // args[0] == time lapse output folder
+        // args[1] == path source
+        // args[2] == realSecBetweenVidSec
+        // args[3] == dump every X frames
+        // args[4] == username
+        // args[5] == password
+
+        if (args.length < 4) {
+            System.out.println("Usage: java -jar [path to jar] \"[timelapse output folder]\" \"[pi|http...]\" [real seconds between video seconds] [new file every n frames] [username] [password]");
+        }
         // new file on X frame, location, name
-        timeLapses.add(new ImageTimelapse(450, 1440, args[0], "1440s"));
-        timeLapses.add(new ImageTimelapse(300, 300, args[0], "300s"));
-//        timeLapses.add(new ImageMotion(300, 1, args[0], "motion"));
+//        timeLapses.add(new ImageTimelapse(450, 1440, args[0], "1440s"));
+        timeLapses.add(new ImageTimelapse(Integer.parseInt(args[3]), Integer.parseInt(args[2]), args[0], args[2]));
 
-        IImageSource imageSource = new URLImageSource(args[1], args[2], args[3]);
+        IImageSource imageSource = null;
+        if (args[1].equals("pi")) {
+            imageSource = new RaspberryCamera();
+        } else if (args[1].startsWith("http")) {
+            imageSource = new URLImageSource(args[1], args[2], args[3]);
+        } else {
+            System.out.println("Unknown image source: " + args[1]);
+        }
 
+        System.out.print("Initializing HTTP server...");
         Undertow server = Undertow.builder()
                 .addHttpListener(8080, "localhost")
                 .setHandler(new HttpHandler() {
@@ -32,6 +51,7 @@ public class TimeLapseRecorder {
                     }
                 }).build();
         server.start();
+        System.out.println("Done");
 
         while (true) {
             try {

@@ -1,6 +1,8 @@
 package com.jasoncopeland.timelapse.imgsource;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 /**
  * Created by Jason on 3/13/2016.
@@ -15,8 +17,8 @@ public class RaspberryCamera implements IImageSource {
     protected String imageType = "png";
 
     public BufferedImage getCurrentImage() {
-        try
-        {
+        long startTime = System.currentTimeMillis();
+        try {
             String fileName = "/tmp/tmlpse-" + System.currentTimeMillis() + ".png";
 
             StringBuilder sb = new StringBuilder(raspistillPath);
@@ -33,14 +35,15 @@ public class RaspberryCamera implements IImageSource {
             sb.append(" -e " + imageType); // jpg, png, bmp, gif
             sb.append(" -o " + fileName); // destination file path
 
-            Runtime.getRuntime().exec(sb.toString());
-            Thread.sleep(captureTimeoutInMS);
+            Process process = Runtime.getRuntime().exec(sb.toString());
+            if (process != null && process.waitFor() == 0) {
+                return ImageIO.read(new File(fileName));
+            }
 
-
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            System.out.println("Total pi camera capture time: " + (System.currentTimeMillis() - startTime) + "ms");
         }
         return null;
     }
