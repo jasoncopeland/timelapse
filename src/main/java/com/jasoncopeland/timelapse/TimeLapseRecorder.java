@@ -40,18 +40,21 @@ public class TimeLapseRecorder {
             System.out.println("Unknown image source: " + args[1]);
         }
 
-        System.out.print("Initializing HTTP server...");
-        Undertow server = Undertow.builder()
-                .addHttpListener(8080, "localhost")
-                .setHandler(new HttpHandler() {
+        if (!(imageSource instanceof RaspberryCamera)) {
+            System.out.println("Initializing HTTP server...");
 
-                    public void handleRequest(final HttpServerExchange exchange) throws Exception {
-                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-                        exchange.getResponseSender().send("test");
-                    }
-                }).build();
-        server.start();
-        System.out.println("Done");
+            Undertow server = Undertow.builder()
+                    .addHttpListener(8080, "localhost")
+                    .setHandler(new HttpHandler() {
+
+                        public void handleRequest(final HttpServerExchange exchange) throws Exception {
+                            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                            exchange.getResponseSender().send("test");
+                        }
+                    }).build();
+            server.start();
+            System.out.println("Done");
+        }
 
         while (true) {
             try {
