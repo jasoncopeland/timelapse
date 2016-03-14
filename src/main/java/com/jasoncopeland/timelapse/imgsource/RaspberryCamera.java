@@ -33,12 +33,10 @@ public class RaspberryCamera implements IImageSource {
                 BufferedImage buffImg = ImageIO.read(targetFile);
                 targetFile.delete();
 
-                buffImg.flush();
                 return buffImg;
             } else {
                 System.out.println("Failed to create process exit code: " + exitCode);
             }
-            process.destroy();
 
         } catch (Exception e) {
             e.printStackTrace();
