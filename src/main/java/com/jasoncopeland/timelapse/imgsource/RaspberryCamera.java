@@ -23,21 +23,16 @@ public class RaspberryCamera implements IImageSource {
 
             StringBuilder sb = new StringBuilder();
 
-            sb.append(" -n -bm"); // no prview or burst
-            sb.append(" -t " + captureTimeoutInMS); // timeout
             if (imgWidth > 0) {
                 sb.append(" -w " + imgWidth);
             }
             if (imgHeight > 0) {
                 sb.append(" -h " + imgHeight);
             }
-            sb.append(" -q " + imgQuality);
-            sb.append(" -e " + imageType); // jpg, png, bmp, gif
-            sb.append(" -o " + fileName); // destination file path
 
             String params = sb.toString();
             System.out.println("Capture params: " + params);
-            ProcessBuilder pb = new ProcessBuilder(raspistillPath, params);
+            ProcessBuilder pb = new ProcessBuilder(raspistillPath, params, "-n", "-bm", "-t", Integer.toString(captureTimeoutInMS), "-e", imageType, "-q", Integer.toString(imgQuality), "-o", fileName);
             Process process = pb.start();
             int exitCode = 0;
             if (process != null && (exitCode = process.waitFor()) == 0) {
