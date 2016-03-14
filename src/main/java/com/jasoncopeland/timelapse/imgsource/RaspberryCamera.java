@@ -21,7 +21,7 @@ public class RaspberryCamera implements IImageSource {
         String fileName = "/tmp/tmlpse-" + System.currentTimeMillis() + ".png";
         try {
 
-            StringBuilder sb = new StringBuilder(raspistillPath);
+            StringBuilder sb = new StringBuilder();
 
             sb.append(" -n -bm"); // no prview or burst
             sb.append(" -t " + captureTimeoutInMS); // timeout
@@ -35,8 +35,12 @@ public class RaspberryCamera implements IImageSource {
             sb.append(" -e " + imageType); // jpg, png, bmp, gif
             sb.append(" -o " + fileName); // destination file path
 
-            Process process = Runtime.getRuntime().exec(sb.toString());
-            if (process != null && process.waitFor() == 0) {
+            String params = sb.toString();
+            System.out.println("Capture params: " + params);
+            ProcessBuilder pb = new ProcessBuilder(raspistillPath, params);
+            Process process = pb.start();
+            int exitCode = 0;
+            if (process != null && (exitCode = process.waitFor()) == 0) {
                 String error = readInputStreamAsString(process.getErrorStream());
                 String output = readInputStreamAsString(process.getErrorStream());
                 if (error.length() > 0 || output.length() > 0) {
@@ -49,8 +53,9 @@ public class RaspberryCamera implements IImageSource {
                 buffImg.flush();
                 return buffImg;
             } else {
-                System.out.println("Failed to create process!!");
+                System.out.println("Failed to create process exit code: " + exitCode);
             }
+            process.destroy();
 
         } catch (Exception e) {
             e.printStackTrace();

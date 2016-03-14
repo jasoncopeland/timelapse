@@ -61,7 +61,7 @@ public class ImageTimelapse {
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new Date());
 
         try {
-            String videoPath = location + "/" + name + "-" + formattedDate + ".mpg";
+            String videoPath = (location + "/" + name + "-" + formattedDate + ".mp4").replaceAll("//", "/");
             System.out.println(name + " - New video file: " + videoPath  + " msBetweenFrames: " + timeBetweenFramesInMs);
             encoder = new SequenceEncoder(new File(videoPath));
             frameCount = 0;
