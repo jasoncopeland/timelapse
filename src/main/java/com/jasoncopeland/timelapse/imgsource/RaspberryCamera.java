@@ -18,8 +18,8 @@ public class RaspberryCamera implements IImageSource {
 
     public BufferedImage getCurrentImage() {
         long startTime = System.currentTimeMillis();
+        String fileName = "/tmp/tmlpse-" + System.currentTimeMillis() + ".png";
         try {
-            String fileName = "/tmp/tmlpse-" + System.currentTimeMillis() + ".png";
 
             StringBuilder sb = new StringBuilder(raspistillPath);
 
@@ -39,10 +39,17 @@ public class RaspberryCamera implements IImageSource {
             if (process != null && process.waitFor() == 0) {
                 String error = readInputStreamAsString(process.getErrorStream());
                 String output = readInputStreamAsString(process.getErrorStream());
-                if (error != null || output != null) {
+                if (error.length() > 0 || output.length() > 0) {
                     System.out.println("capture cmd output: \"" + output + "\" error: \"" + error + "\"");
                 }
-                return ImageIO.read(new File(fileName));
+                File targetFile = new File(fileName);
+                BufferedImage buffImg = ImageIO.read(targetFile);
+                targetFile.delete();
+
+                buffImg.flush();
+                return buffImg;
+            } else {
+                System.out.println("Failed to create process!!");
             }
 
         } catch (Exception e) {
