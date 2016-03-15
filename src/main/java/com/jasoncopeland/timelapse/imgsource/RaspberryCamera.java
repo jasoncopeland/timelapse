@@ -20,8 +20,21 @@ public class RaspberryCamera implements IImageSource {
         long startTime = System.currentTimeMillis();
         String fileName = "/tmp/tmlpse-" + System.currentTimeMillis() + ".png";
         try {
-            ProcessBuilder pb = new ProcessBuilder(raspistillPath, "-w", Integer.toString(imgWidth), "-h", Integer.toString(imgHeight), "-n", "-bm", "-t", Integer.toString(captureTimeoutInMS), "-e", imageType, "-q", Integer.toString(imgQuality), "-o", fileName);
-            Process process = pb.start();
+            StringBuilder sb = new StringBuilder(raspistillPath);
+
+            sb.append(" -n -bm"); // no prview or burst
+            sb.append(" -t " + captureTimeoutInMS); // timeout
+            if (imgWidth > 0) {
+                sb.append(" -w " + imgWidth);
+            }
+            if (imgHeight > 0) {
+                sb.append(" -h " + imgHeight);
+            }
+            sb.append(" -q " + imgQuality);
+            sb.append(" -e " + imageType); // jpg, png, bmp, gif
+            sb.append(" -o " + fileName); // destination file path
+
+            Process process = Runtime.getRuntime().exec(sb.toString());
             int exitCode = 0;
             if (process != null && (exitCode = process.waitFor()) == 0) {
                 String error = readInputStreamAsString(process.getErrorStream());
