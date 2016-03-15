@@ -12,17 +12,17 @@ public class RaspberryCamera implements IImageSource {
     protected final String raspistillPath = "/opt/vc/bin/raspistill";
     protected final int captureTimeoutInMS = 10000;
     protected final int imgQuality = 100;
-    protected int imgWidth = 800;
-    protected int imgHeight = 600;
-    protected String imageType = "png";
+    protected int imgWidth = 1920;
+    protected int imgHeight = 1080;
+    protected String imageType = "jpg";
 
     public BufferedImage getCurrentImage() {
         long startTime = System.currentTimeMillis();
-        String fileName = "/tmp/tmlpse-" + System.currentTimeMillis() + ".png";
+        String fileName = "/tmp/tmlpse-" + System.currentTimeMillis() + ".jpg";
         try {
             StringBuilder sb = new StringBuilder(raspistillPath);
 
-            sb.append(" -n -bm"); // no prview or burst
+            sb.append(" -n -bm -t 1"); // no prview or burst
             sb.append(" -t " + captureTimeoutInMS); // timeout
             if (imgWidth > 0) {
                 sb.append(" -w " + imgWidth);
