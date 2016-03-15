@@ -42,8 +42,8 @@ public class ImageTimelapse {
         try {
             long startTime = System.currentTimeMillis();
             System.out.print("Encoding image into video...");
-            encoder.encodeImage(image);
             lastFrameTime = System.currentTimeMillis();
+            encoder.encodeImage(image);
 
             System.out.println(name + " frame: " + frameCount + " time: " + (System.currentTimeMillis() - startTime) + "ms");
             if (frameCount++ >= newFileOnFrameCount) {
