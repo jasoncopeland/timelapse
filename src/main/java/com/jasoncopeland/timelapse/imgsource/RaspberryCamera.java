@@ -34,6 +34,7 @@ public class RaspberryCamera implements IImageSource {
             sb.append(" -e " + imageType); // jpg, png, bmp, gif
             sb.append(" -o " + fileName); // destination file path
 
+            System.out.println("Executing: " + sb.toString());
             Process process = Runtime.getRuntime().exec(sb.toString());
             int exitCode = 0;
             if (process != null && (exitCode = process.waitFor()) == 0) {
