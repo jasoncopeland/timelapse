@@ -45,7 +45,8 @@ public class ImageTimelapse {
             lastFrameTime = System.currentTimeMillis();
             encoder.encodeImage(image);
 
-            System.out.println(name + " frame: " + frameCount + " time: " + (System.currentTimeMillis() - startTime) + "ms");
+            long remainInMin = (newFileOnFrameCount - frameCount) * timeBetweenFramesInMs / 1000 / 60;
+            System.out.println(name + " frame: " + frameCount + " time: " + (System.currentTimeMillis() - startTime) + "ms remain: " + remainInMin + " min");
             if (frameCount++ >= newFileOnFrameCount) {
                 createNewFile();
             }

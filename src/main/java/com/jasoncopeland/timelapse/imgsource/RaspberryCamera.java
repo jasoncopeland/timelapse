@@ -36,17 +36,17 @@ public class RaspberryCamera implements IImageSource {
             Process process = Runtime.getRuntime().exec(sb.toString());
             int exitCode = 0;
             if (process != null && (exitCode = process.waitFor()) == 0) {
-                String error = readInputStreamAsString(process.getErrorStream());
-                String output = readInputStreamAsString(process.getErrorStream());
-                if (error.length() > 0 || output.length() > 0) {
-                    System.out.println("capture cmd output: \"" + output + "\" error: \"" + error + "\"");
-                }
                 File targetFile = new File(fileName);
                 BufferedImage buffImg = ImageIO.read(targetFile);
                 targetFile.delete();
 
                 return buffImg;
             } else {
+                String error = readInputStreamAsString(process.getErrorStream());
+                String output = readInputStreamAsString(process.getErrorStream());
+                if (error.length() > 0 || output.length() > 0) {
+                    System.out.println("capture cmd output: \"" + output + "\" error: \"" + error + "\"");
+                }
                 System.out.println("Failed to create process exit code: " + exitCode);
             }
 
