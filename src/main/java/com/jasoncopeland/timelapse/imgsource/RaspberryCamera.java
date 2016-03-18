@@ -14,6 +14,13 @@ public class RaspberryCamera implements IImageSource {
     protected int imgWidth = 1920;
     protected int imgHeight = 1080;
     protected String imageType = "jpg";
+    protected String imgCaptureParams = null;
+
+    public RaspberryCamera(int width, int height, String imgCaptureParams) {
+        imgWidth = width;
+        imgHeight = height;
+        this.imgCaptureParams = imgCaptureParams;
+    }
 
     public BufferedImage getCurrentImage() {
         long startTime = System.currentTimeMillis();
@@ -21,7 +28,8 @@ public class RaspberryCamera implements IImageSource {
         try {
             StringBuilder sb = new StringBuilder(raspistillPath);
 
-            sb.append(" -n -bm -t 1 -vf"); // no prview or burst
+            sb.append(" -n -bm -t 1 "); // no prview or burst
+            sb.append(imgCaptureParams);
             if (imgWidth > 0) {
                 sb.append(" -w " + imgWidth);
             }
