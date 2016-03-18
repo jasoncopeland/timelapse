@@ -33,7 +33,7 @@ public class TimeLapseRecorder {
 
         IImageSource imageSource = null;
         if (args[1].equals("pi")) {
-            imageSource = new RaspberryCamera(Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[4]);
+            imageSource = new RaspberryCamera(Integer.parseInt(args[4]), Integer.parseInt(args[5]), args[6]);
         } else if (args[1].startsWith("http")) {
             imageSource = new URLImageSource(args[1], args[2], args[3]);
         } else {
