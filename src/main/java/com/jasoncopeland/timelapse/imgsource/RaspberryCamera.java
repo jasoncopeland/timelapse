@@ -41,6 +41,7 @@ public class RaspberryCamera implements IImageSource {
             sb.append(" -o " + fileName); // destination file path
 
             //System.out.println("Executing: " + sb.toString());
+            System.out.print("Starting camera capture...");
             Process process = Runtime.getRuntime().exec(sb.toString());
             int exitCode = 0;
             if (process != null && (exitCode = process.waitFor()) == 0) {
@@ -53,7 +54,7 @@ public class RaspberryCamera implements IImageSource {
                 String error = readInputStreamAsString(process.getErrorStream());
                 String output = readInputStreamAsString(process.getErrorStream());
                 if (error.length() > 0 || output.length() > 0) {
-                    System.out.println("capture cmd output: \"" + output + "\" error: \"" + error + "\"");
+                    System.out.println("\ncapture cmd output: \"" + output + "\" error: \"" + error + "\"");
                 }
                 System.out.println("Failed to create process exit code: " + exitCode);
             }
@@ -61,7 +62,7 @@ public class RaspberryCamera implements IImageSource {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            System.out.println("Total pi camera capture time: " + (System.currentTimeMillis() - startTime) + " ms");
+            System.out.print(" in " + (System.currentTimeMillis() - startTime) + " ms");
         }
         return null;
     }

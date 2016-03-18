@@ -41,12 +41,12 @@ public class ImageTimelapse {
     public void processImage(BufferedImage image) {
         try {
             long startTime = System.currentTimeMillis();
-            System.out.print("Encoding image into video...");
+            System.out.print(" into video...");
             lastFrameTime = System.currentTimeMillis();
             encoder.encodeImage(image);
 
             long remainInMin = (newFileOnFrameCount - frameCount) * timeBetweenFramesInMs / 1000 / 60;
-            System.out.println(name + " frame: " + frameCount + " time: " + (System.currentTimeMillis() - startTime) + " ms remain: " + remainInMin + " min");
+            System.out.println(" in " + (System.currentTimeMillis() - startTime) + " ms for " + name + " frame: " + frameCount + " ms remain: " + remainInMin + " min");
             if (frameCount++ >= newFileOnFrameCount) {
                 createNewFile();
             }
