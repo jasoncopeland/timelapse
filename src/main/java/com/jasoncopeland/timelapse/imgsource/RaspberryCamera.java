@@ -21,7 +21,7 @@ public class RaspberryCamera implements IImageSource {
         try {
             StringBuilder sb = new StringBuilder(raspistillPath);
 
-            sb.append(" -n -bm -t 1 -hf"); // no prview or burst
+            sb.append(" -n -bm -t 1 -vf"); // no prview or burst
             if (imgWidth > 0) {
                 sb.append(" -w " + imgWidth);
             }
@@ -53,7 +53,7 @@ public class RaspberryCamera implements IImageSource {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            System.out.println("Total pi camera capture time: " + (System.currentTimeMillis() - startTime) + "ms");
+            System.out.println("Total pi camera capture time: " + (System.currentTimeMillis() - startTime) + " ms");
         }
         return null;
     }
