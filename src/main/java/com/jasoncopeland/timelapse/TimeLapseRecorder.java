@@ -67,7 +67,9 @@ public class TimeLapseRecorder {
                             img = imageSource.getCurrentImage();
                         }
                         // write it to the stream
-                        tl.processImage(img);
+			if (img != null) {
+	                        tl.processImage(img);
+			}
                     }
                 }
                 if (img != null) {
