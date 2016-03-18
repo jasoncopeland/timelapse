@@ -58,8 +58,19 @@ public class TimeLapseRecorder {
 
         while (true) {
             try {
+                boolean flushFile = false;
+                if (System.in.available() > 0) {
+                    int ch = System.in.read();
+                    if (ch == '1') {
+                        System.out.println("Flushing current recordings.");
+                        flushFile = true;
+                    }
+                }
                 BufferedImage img = null;
                 for (ImageTimelapse tl : timeLapses) {
+                    if (flushFile) {
+                        tl.createNewFile();
+                    }
                     // We found one that needs a fresh image!
                     if (tl.needNewImage()) {
                         // If one hasn't been captured for this segment, capture one
